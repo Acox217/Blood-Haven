@@ -1,0 +1,453 @@
+USE [master]
+GO
+/****** Object:  Database [BloodHavenDB]    Script Date: 5/5/2025 10:52:10 AM ******/
+CREATE DATABASE [BloodHavenDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'BloodHavenDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BloodHavenDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'BloodHavenDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BloodHavenDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [BloodHavenDB] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [BloodHavenDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [BloodHavenDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [BloodHavenDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [BloodHavenDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [BloodHavenDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [BloodHavenDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [BloodHavenDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [BloodHavenDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [BloodHavenDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [BloodHavenDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [BloodHavenDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [BloodHavenDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [BloodHavenDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [BloodHavenDB] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [BloodHavenDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [BloodHavenDB]
+GO
+/****** Object:  Table [dbo].[Donors]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Donors](
+	[DonorID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [varchar](255) NOT NULL,
+	[LastName] [nvarchar](50) NULL,
+	[BloodType] [nchar](3) NULL,
+	[ContactNumber] [nchar](15) NULL,
+	[Email] [nvarchar](50) NULL,
+	[DOB] [date] NULL,
+	[Age] [nchar](10) NULL,
+	[Weightlbs] [nchar](10) NULL,
+	[IsActive] [nchar](10) NULL,
+	[SSN] [nchar](30) NULL,
+	[SSN_Encrypted] [varbinary](max) NULL,
+	[Email_Encrypted] [varbinary](max) NULL,
+ CONSTRAINT [PK_Donors] PRIMARY KEY CLUSTERED 
+(
+	[DonorID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Appointments]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Appointments](
+	[AppointmentID] [int] IDENTITY(1,1) NOT NULL,
+	[DonorID] [int] NOT NULL,
+	[AppointmentDate] [datetime] NOT NULL,
+	[Location] [varchar](255) NOT NULL,
+	[Status] [varchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[AppointmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[UpcomingAppointments]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[UpcomingAppointments] AS
+SELECT
+    a.AppointmentID,
+    d.FirstName,
+    d.LastName,
+    d.BloodType,
+    a.AppointmentDate,
+    a.Location,
+    a.Status
+FROM
+    Appointments a
+JOIN
+    Donors d ON a.DonorID = d.DonorID
+WHERE
+    a.AppointmentDate >= CAST(GETDATE() AS DATE)
+    AND a.Status = 'Scheduled';
+GO
+/****** Object:  Table [dbo].[BloodInventoryTable]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BloodInventoryTable](
+	[InventoryID] [int] IDENTITY(1,1) NOT NULL,
+	[BloodType] [varchar](5) NOT NULL,
+	[QuantityAvailable] [int] NOT NULL,
+	[ExpirationDate] [date] NOT NULL,
+ CONSTRAINT [PK_BloodInventoryTable] PRIMARY KEY CLUSTERED 
+(
+	[InventoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[CurrentBloodInventory]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[CurrentBloodInventory] AS
+SELECT
+    BloodType,
+    SUM(QuantityAvailable) AS TotalQuantityAvailable,
+    MIN(ExpirationDate) AS NextExpirationDate
+FROM
+    BloodInventoryTable
+GROUP BY
+    BloodType;
+GO
+/****** Object:  Table [dbo].[AppointmentStatusLog]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[AppointmentStatusLog](
+	[LogID] [int] IDENTITY(1,1) NOT NULL,
+	[AppointmentID] [int] NULL,
+	[OldStatus] [varchar](50) NULL,
+	[NewStatus] [varchar](50) NULL,
+	[ChangeDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[LogID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Contacts]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Contacts](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FullName] [nvarchar](255) NOT NULL,
+	[EmailAddress] [nvarchar](255) NOT NULL,
+	[Subject] [nvarchar](255) NULL,
+	[Message] [text] NOT NULL,
+	[CreatedAt] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Donations]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Donations](
+	[DonationID] [int] IDENTITY(1,1) NOT NULL,
+	[DonorID] [int] NOT NULL,
+	[DonationDate] [date] NULL,
+	[AmountDonated] [nvarchar](50) NULL,
+	[DonationType] [varchar](50) NULL,
+	[Location] [varchar](50) NULL,
+ CONSTRAINT [PK_Donations] PRIMARY KEY CLUSTERED 
+(
+	[DonationID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DonationTrackingTable]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DonationTrackingTable](
+	[TrackingID] [int] IDENTITY(1,1) NOT NULL,
+	[DonorID] [int] NOT NULL,
+	[InventoryID] [int] NOT NULL,
+ CONSTRAINT [PK_DonationTrackingTable] PRIMARY KEY CLUSTERED 
+(
+	[TrackingID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Logins]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Logins](
+	[UserID] [int] NOT NULL,
+	[LoginDate] [date] NOT NULL,
+	[LoginTime] [time](7) NULL,
+	[IPAddress] [varchar](15) NULL,
+ CONSTRAINT [PK_Logins] PRIMARY KEY CLUSTERED 
+(
+	[UserID] ASC,
+	[LoginDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 5/5/2025 10:52:10 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[UserID] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [varchar](255) NOT NULL,
+	[PasswordHash] [varchar](255) NOT NULL,
+	[Role] [varchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+ CONSTRAINT [UC_Username] UNIQUE NONCLUSTERED 
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Index [idx_appointmentdate]    Script Date: 5/5/2025 10:52:10 AM ******/
+CREATE NONCLUSTERED INDEX [idx_appointmentdate] ON [dbo].[Appointments]
+(
+	[AppointmentDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [idx_donorid]    Script Date: 5/5/2025 10:52:10 AM ******/
+CREATE NONCLUSTERED INDEX [idx_donorid] ON [dbo].[Appointments]
+(
+	[DonorID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [idx_username]    Script Date: 5/5/2025 10:52:10 AM ******/
+CREATE NONCLUSTERED INDEX [idx_username] ON [dbo].[Users]
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[AppointmentStatusLog] ADD  DEFAULT (getdate()) FOR [ChangeDate]
+GO
+ALTER TABLE [dbo].[Contacts] ADD  DEFAULT (getdate()) FOR [CreatedAt]
+GO
+ALTER TABLE [dbo].[Appointments]  WITH CHECK ADD  CONSTRAINT [FK_Appointments_Donors] FOREIGN KEY([DonorID])
+REFERENCES [dbo].[Donors] ([DonorID])
+GO
+ALTER TABLE [dbo].[Appointments] CHECK CONSTRAINT [FK_Appointments_Donors]
+GO
+ALTER TABLE [dbo].[AppointmentStatusLog]  WITH CHECK ADD FOREIGN KEY([AppointmentID])
+REFERENCES [dbo].[Appointments] ([AppointmentID])
+GO
+ALTER TABLE [dbo].[Donations]  WITH CHECK ADD  CONSTRAINT [FK_Donations_Donors] FOREIGN KEY([DonorID])
+REFERENCES [dbo].[Donors] ([DonorID])
+GO
+ALTER TABLE [dbo].[Donations] CHECK CONSTRAINT [FK_Donations_Donors]
+GO
+ALTER TABLE [dbo].[Logins]  WITH CHECK ADD FOREIGN KEY([UserID])
+REFERENCES [dbo].[Users] ([UserID])
+GO
+ALTER TABLE [dbo].[Appointments]  WITH CHECK ADD  CONSTRAINT [CHK_AppointmentDate] CHECK  (([AppointmentDate]>=CONVERT([date],getdate())))
+GO
+ALTER TABLE [dbo].[Appointments] CHECK CONSTRAINT [CHK_AppointmentDate]
+GO
+ALTER TABLE [dbo].[Appointments]  WITH CHECK ADD  CONSTRAINT [CHK_Status] CHECK  (([Status]='Cancelled' OR [Status]='Completed' OR [Status]='Scheduled'))
+GO
+ALTER TABLE [dbo].[Appointments] CHECK CONSTRAINT [CHK_Status]
+GO
+ALTER TABLE [dbo].[Users]  WITH CHECK ADD  CONSTRAINT [CHK_Role] CHECK  (([Role]='User' OR [Role]='Staff' OR [Role]='Admin'))
+GO
+ALTER TABLE [dbo].[Users] CHECK CONSTRAINT [CHK_Role]
+GO
+/****** Object:  StoredProcedure [dbo].[AddDonor]    Script Date: 5/5/2025 10:52:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[AddDonor]
+    @FirstName VARCHAR(255),
+    @LastName VARCHAR(255),
+    @BloodType VARCHAR(5),
+    @ContactNumber VARCHAR(15)
+AS
+BEGIN
+    INSERT INTO Donors (FirstName, LastName, BloodType, ContactNumber)
+    VALUES (@FirstName, @LastName, @BloodType, @ContactNumber);
+END;
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[DeleteDonor]    Script Date: 5/5/2025 10:52:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[DeleteDonor]
+    @DonorID INT
+AS
+BEGIN
+    UPDATE Donors
+    SET IsActive = 0  -- Assuming there is an IsActive column to mark active/inactive donors
+    WHERE DonorID = @DonorID;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[LogDonation]    Script Date: 5/5/2025 10:52:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[LogDonation]
+    @DonorID INT,
+    @DonationDate DATE,
+    @AmountDonated INT,  -- Assuming amount donated is stored in milliliters
+    @DonationType VARCHAR(50),
+    @Location VARCHAR(255)
+AS
+BEGIN
+    INSERT INTO Donations (DonorID, DonationDate, AmountDonated, DonationType, Location)
+    VALUES (@DonorID, @DonationDate, @AmountDonated, @DonationType, @Location);
+
+    -- Update inventory
+    UPDATE BloodInventory
+    SET QuantityAvailable = QuantityAvailable + @AmountDonated
+    WHERE BloodType = (SELECT BloodType FROM Donors WHERE DonorID = @DonorID);
+END;
+
+GO
+/****** Object:  StoredProcedure [dbo].[ScheduleAppointment]    Script Date: 5/5/2025 10:52:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[ScheduleAppointment]
+    @DonorID INT,
+    @AppointmentDate DATETIME,
+    @Location VARCHAR(255),
+    @Status VARCHAR(50) = 'Scheduled'
+AS
+BEGIN
+    INSERT INTO Appointments (DonorID, AppointmentDate, Location, Status)
+    VALUES (@DonorID, @AppointmentDate, @Location, @Status);
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateAppointmentStatus]    Script Date: 5/5/2025 10:52:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateAppointmentStatus]
+    @AppointmentID INT,
+    @NewStatus VARCHAR(50)
+AS
+BEGIN
+    UPDATE Appointments
+    SET Status = @NewStatus
+    WHERE AppointmentID = @AppointmentID;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[UpdateDonor]    Script Date: 5/5/2025 10:52:11 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[UpdateDonor]
+    @DonorID INT,
+    @FirstName VARCHAR(255),
+    @LastName VARCHAR(255),
+    @ContactNumber VARCHAR(15),
+    @BloodType VARCHAR(5),
+    @Email VARCHAR(255)
+AS
+BEGIN
+    UPDATE Donors
+    SET FirstName = @FirstName,
+        LastName = @LastName,
+        ContactNumber = @ContactNumber,
+        BloodType = @BloodType,
+        Email = @Email
+    WHERE DonorID = @DonorID;
+END;
+GO
+USE [master]
+GO
+ALTER DATABASE [BloodHavenDB] SET  READ_WRITE 
+GO

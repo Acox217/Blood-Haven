@@ -1,0 +1,260 @@
+/* Light Theme (Default) */
+body {
+  background-color: white !important;
+  color: #212121 !important;
+}
+
+.navbar {
+  background-color: #121212 !important;
+}
+
+.navbar .nav-link {
+  color: white !important;
+}
+
+.card {
+  background-color: #f8f9fa !important;
+}
+
+/* Home page header styling */
+.home-header {
+  background-color: #b22222 !important;
+}
+
+.home-header h1,
+.home-header h2,
+.home-header p,
+.home-header .tagline {
+  color: white !important;
+}
+
+/* Home buttons styling */
+.home-buttons .btn-outline {
+  color: white !important;
+  border-color: white !important;
+}
+
+/* Dark theme home header */
+body[data-theme="dark"] .home-header {
+  background-color: #8b0000 !important;
+}
+
+body[data-theme="dark"] .home-header h1,
+body[data-theme="dark"] .home-header h2,
+body[data-theme="dark"] .home-header p,
+body[data-theme="dark"] .home-header .tagline {
+  color: white !important;
+}
+
+body[data-theme="dark"] .home-buttons .btn-outline {
+  color: white !important;
+  border-color: white !important;
+}
+
+body[data-theme="dark"] .home-header * {
+  color: white !important;
+}
+
+/* Paragraph styling for light theme */
+p {
+  color: #616161 !important;
+}
+
+.card p {
+  color: #757575 !important;
+}
+
+.card h3 + p, 
+.card li,
+.feature-card p {
+  color: #757575 !important;
+}
+
+/* Red theme color for light mode */
+h1, h2, h3, h4, h5, h6 {
+  color: #b22222 !important;
+}
+
+.btn-primary, .primary-color {
+  background-color: #b22222 !important;
+  border-color: #b22222 !important;
+}
+
+/* Dark Theme */
+body[data-theme="dark"] {
+  background-color: #121212 !important;
+  color: white !important;
+}
+
+body[data-theme="dark"] .navbar {
+  background-color: white !important;
+}
+
+body[data-theme="dark"] .navbar .nav-link {
+  color: #212121 !important;
+}
+
+body[data-theme="dark"] .navbar .btn-primary {
+  color: white !important;
+}
+
+body[data-theme="dark"] .card {
+  background-color: #1e1e1e !important;
+  border-color: #333 !important;
+}
+
+/* Darker red for dark theme */
+body[data-theme="dark"] h1,
+body[data-theme="dark"] h2,
+body[data-theme="dark"] h3,
+body[data-theme="dark"] h4,
+body[data-theme="dark"] h5,
+body[data-theme="dark"] h6 {
+  color: #8b0000 !important;
+}
+
+body[data-theme="dark"] .btn-primary,
+body[data-theme="dark"] .primary-color {
+  background-color: #8b0000 !important;
+  border-color: #8b0000 !important;
+}
+
+body[data-theme="dark"] .btn-outline {
+  border-color: #212121 !important;
+  color: #212121 !important;
+}
+
+/* Paragraph styling for dark theme */
+body[data-theme="dark"] p {
+  color: #e0e0e0 !important;
+}
+
+body[data-theme="dark"] .card p {
+  color: #f5f5f5 !important;
+}
+
+body[data-theme="dark"] .card h3 + p,
+body[data-theme="dark"] .card li,
+body[data-theme="dark"] .feature-card p {
+  color: #f5f5f5 !important;
+}
+
+/* Additional styles for inputs in dark mode */
+body[data-theme="dark"] input,
+body[data-theme="dark"] select,
+body[data-theme="dark"] textarea {
+  background-color: #2a2a2a !important;
+  border-color: #444 !important;
+  color: white !important;
+}
+
+body[data-theme="dark"] .navbar-toggler {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border-color: #ddd !important;
+}
+
+/* Stats styling */
+.stat-number {
+  color: #b22222 !important;
+}
+
+body[data-theme="dark"] .stat-number {
+  color: #8b0000 !important;
+}
+
+.stat-label {
+  color: #616161 !important;
+}
+
+body[data-theme="dark"] .stat-label {
+  color: #e0e0e0 !important;
+}
+
+.card.bg-primary .btn-outline {
+  color: #b22222 !important;
+  border-color: #b22222 !important;
+}
+
+body[data-theme="dark"] .card.bg-primary .btn-outline {
+  color: white !important;
+  border-color: white !important;
+}
+
+body[data-theme="dark"] .form-label {
+  color: #f5f5f5 !important;
+}
+
+body[data-theme="dark"] input::placeholder,
+body[data-theme="dark"] textarea::placeholder,
+body[data-theme="dark"] select::placeholder {
+  color: #e0e0e0 !important;
+  opacity: 0.7 !important;
+}
+
+body[data-theme="dark"] .form-check-label {
+  color: #f5f5f5 !important;
+}
+
+footer {
+  background-color: #b22222 !important;
+}
+
+body[data-theme="dark"] footer {
+  background-color: #8b0000 !important;
+}
+
+/* Had a lot of trouble with footer headings for some reason. Specific styling to ensure they're visible in both themes */
+body footer h1, 
+body footer h2, 
+body footer h3, 
+body footer h4, 
+body footer h5, 
+body footer h6,
+footer h1, 
+footer h2, 
+footer h3, 
+footer h4, 
+footer h5, 
+footer h6 {
+  color: white !important;
+}
+
+/* An even higher specificity selector for dark theme footer headings */
+body[data-theme="dark"] footer h1, 
+body[data-theme="dark"] footer h2, 
+body[data-theme="dark"] footer h3, 
+body[data-theme="dark"] footer h4, 
+body[data-theme="dark"] footer h5, 
+body[data-theme="dark"] footer h6 {
+  color: white !important;
+}
+
+footer p, 
+footer li, 
+footer a, 
+footer span {
+  color: white !important;
+}
+
+footer a {
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #f5f5f5 !important;
+  text-decoration: underline;
+}
+
+/* List styling */
+ul, ol {
+  color: #616161 !important;
+}
+
+body[data-theme="dark"] ul,
+body[data-theme="dark"] ol {
+  color: #e0e0e0 !important;
+}
+
+footer * {
+  color: white !important;
+}
